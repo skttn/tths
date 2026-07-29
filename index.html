@@ -1168,7 +1168,7 @@ function validatePage(p) {
     if (!val('hsg_giai')) ok = showErr('hsg_giai', true) && false; else showErr('hsg_giai', false);
     if (!val('bcs_lop')) ok = showErr('bcs_lop', true) && false; else showErr('bcs_lop', false);
     if (!val('nangkhieu')) ok = showErr('nangkhieu', true) && false; else showErr('nangkhieu', false);
-    if (!val('nangkhieu_db')) ok = showErr('nangkhieu_db', true) && false; else showErr('nangkhieu_db', false);
+    if (!val('giaithuong_db')) ok = showErr('giaithuong_db', true) && false; else showErr('giaithuong_db', false);
     if (!val('ph_banhoi')) ok = showErr('ph_banhoi', true) && false; else showErr('ph_banhoi', false);
     if (!val('dinhhuong_nghe')) ok = showErr('dinhhuong_nghe', true) && false; else showErr('dinhhuong_nghe', false);
 
@@ -1354,7 +1354,7 @@ function submitForm() {
     hsg_giai:        val('hsg_giai'),
     bcs_lop:         val('bcs_lop'),
     nangkhieu:       val('nangkhieu'),
-    nangkhieu_db:    val('nangkhieu_db'),
+    giaithuong_db:   val('giaithuong_db'),
     ph_banhoi:       val('ph_banhoi'),
     dinhhuong_nghe:  val('dinhhuong_nghe'),
     nguyenvong_dichvu: getServicePreferences(),
@@ -1401,7 +1401,7 @@ function showSummary(data) {
     ace3_hoten:'ACE 3 - Họ tên', ace3_ngaysinh:'ACE 3 - Ngày sinh', ace3_lop:'ACE 3 - Lớp', ace3_truong:'ACE 3 - Trường',
     sdt_hs:'SĐT học sinh', cccd:'CCCD/Mã định danh', bhyt:'Số thẻ BHYT/BHXH', chieucao:'Chiều cao (cm)', cannang:'Cân nặng (kg)',
     hsg_thamgia:'Tham gia thi HSG', hsg_giai:'Giải HSG đạt được', bcs_lop:'Tham gia BCS lớp',
-    nangkhieu:'Năng khiếu', nangkhieu_db:'Năng khiếu đặc biệt', ph_banhoi:'PH tham gia Ban chi hội',
+    nangkhieu:'Năng khiếu', giaithuong_db:'Giải thưởng đặc biệt', ph_banhoi:'PH tham gia Ban chi hội',
     dinhhuong_nghe:'Định hướng nghề nghiệp', nguyenvong_dichvu:'Nguyện vọng dịch vụ trường', mongmuon:'Mong muốn của PH/HS'
   };
   const html = Object.entries(data).map(([k,v]) =>
