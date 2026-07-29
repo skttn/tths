@@ -1362,7 +1362,7 @@ function submitForm() {
   };
 
   // ← Dán URL Web App của bạn vào đây
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTOEjRxozwDr-TR9c4NJhtGxThCEANAXEKV5WYWfvGFS5Fxc6G6zzZE4Bvv7i5rN0/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3rRFJt_msLIh37_5mc3THm9z-2u2AHouasj5cXe_9JQjRYvWIPgMPWU397F9iyBY6/exec';
 
   const btnNext = document.getElementById('btnNext');
   btnNext.disabled = true;
@@ -1370,24 +1370,10 @@ function submitForm() {
 
   fetch(SCRIPT_URL, {
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
+    mode: 'no-cors',        // bắt buộc vì Apps Script không trả CORS header
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(result => {
-
-    if(result.result === "success"){
-        showSummary(data);
-    }else{
-        alert(result.message);
-    }
-
-})
-  .catch(err=>{
-    alert(err);
-  });
   .then(() => {
     // no-cors không đọc được response → cứ chuyển sang trang thành công
     showSummary(data);
@@ -1397,7 +1383,7 @@ function submitForm() {
     btnNext.disabled = false;
     btnNext.textContent = '✓ Hoàn tất & Gửi';
   });
-  }
+}
 
 function showSummary(data) {
   const labels = {
