@@ -637,7 +637,7 @@
         <div class="field-group">
           <label>Chiều cao <span class="req">*</span></label>
           <div class="input-with-unit">
-            <input type="number" id="chieucao" placeholder="Ví dụ: 165" min="0" step="0.1" inputmode="decimal">
+            <input type="text" id="chieucao" placeholder="Ví dụ: 165" inputmode="decimal" pattern="[0-9.]+">
             <span class="unit-badge">cm</span>
           </div>
           <div class="error-msg" id="err_chieucao">Chiều cao chỉ được nhập số</div>
@@ -645,7 +645,7 @@
         <div class="field-group">
           <label>Cân nặng <span class="req">*</span></label>
           <div class="input-with-unit">
-            <input type="number" id="cannang" placeholder="Ví dụ: 55" min="0" step="0.1" inputmode="decimal">
+            <input type="text" id="cannang" placeholder="Ví dụ: 55" inputmode="decimal" pattern="[0-9.]+">
             <span class="unit-badge">kg</span>
           </div>
           <div class="error-msg" id="err_cannang">Cân nặng chỉ được nhập số</div>
@@ -1131,7 +1131,11 @@ function cascadeXaFromHuyen(huyenId, xaId, tinhId, data) {
   }
 }
 
-function val(id) { return document.getElementById(id).value.trim(); }
+function val(id) {
+  const el = document.getElementById(id);
+  if (!el) return '';
+  return (el.value == null ? '' : String(el.value)).trim();
+}
 
 function isChecked(id) {
   const el = document.getElementById(id);
