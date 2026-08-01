@@ -5,15 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Phiếu Thông Tin Học Sinh</title>
 <style>
+  /* ── Reset toàn bộ padding/margin, dùng border-box để width tính cả padding ── */
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Nền trang và font chữ chung ── */
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; min-height: 100vh; }
+
+  /* ── Khung bao ngoài: giới hạn form rộng 700px, căn giữa trang ── */
   .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+
+  /* ── Thẻ trắng chứa toàn bộ form, có bo góc và đổ bóng ── */
   .card { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; }
+
+  /* ── Phần đầu trang: tiêu đề + mô tả trên nền gradient xanh ── */
   .header { background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; padding: 24px 28px; }
   .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
   .header p { font-size: 0.95rem; opacity: 0.85; margin-top: 6px; }
+
+  /* ── Thanh tiến trình % (JS cập nhật width theo currentPage) ── */
   .progress-bar { background: #e3eaf5; height: 6px; }
   .progress-fill { background: linear-gradient(90deg, #42a5f5, #1565c0); height: 6px; transition: width 0.4s ease; }
+
+  /* ── Hàng bước 1-5 phía trên form: xám=chưa đến, xanh=đang ở, lá=đã qua ── */
   .steps { display: flex; justify-content: space-between; padding: 12px 16px 0; background: #f8faff; border-bottom: 1px solid #e8edf5; flex-wrap: nowrap; gap: 2px; }
   .step { display: flex; align-items: center; gap: 4px; font-size: 0.82rem; color: #90a4ae; cursor: default; padding-bottom: 12px; white-space: nowrap; }
   .step.active { color: #1565c0; font-weight: 600; }
@@ -21,25 +34,42 @@
   .step-num { width: 22px; height: 22px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; }
   .step.done .step-num { background: #43a047; color: white; border-color: #43a047; }
   .step.active .step-num { background: #1565c0; color: white; }
+  /* ── Vùng nội dung form bên trong mỗi trang ── */
   .form-body { padding: 28px; }
+
+  /* ── Tiêu đề nhóm "1. Thông tin cơ bản", "2. Thông tin cư trú", ... ── */
   .section-title { font-size: 1.1rem; font-weight: 700; color: #1565c0; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #e3eaf5; padding-bottom: 10px; margin-bottom: 22px; }
+
+  /* ── Wrapper của mỗi câu hỏi: gồm label + input/select + error-msg ── */
   .field-group { margin-bottom: 18px; }
   label { display: block; font-size: 0.92rem; font-weight: 600; color: #37474f; margin-bottom: 6px; }
+
+  /* ── Dấu * màu đỏ đánh dấu trường bắt buộc ── */
   label span.req { color: #e53935; margin-left: 2px; }
+
+  /* ── Style chung cho tất cả ô nhập liệu và dropdown ── */
   input[type=text], input[type=date], input[type=number], select, input[type=email] {
     width: 100%; padding: 10px 14px; border: 1.5px solid #cfd8dc; border-radius: 8px;
     font-size: 1.02rem; color: #263238; background: #fafbff; transition: border-color 0.2s;
     appearance: none; -webkit-appearance: none;
   }
+  /* ── Viền xanh khi đang focus, viền đỏ khi validate lỗi ── */
   input:focus, select:focus { outline: none; border-color: #1565c0; background: #fff; }
   textarea:focus { outline: none; border-color: #1565c0 !important; background: #fff !important; }
   input.error, select.error { border-color: #e53935; }
   textarea.error { border-color: #e53935 !important; }
+
+  /* ── Dòng thông báo lỗi: ẩn mặc định, JS show khi validate thất bại ── */
   .error-msg { color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none; }
+
+  /* ── Bố cục lưới: row2=2 cột, row3=3 cột (responsive → 1 cột trên mobile) ── */
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* ── Chú thích nhỏ màu xám in nghiêng bên dưới input ── */
   .hint { font-size: 0.95rem; color: #78909c; margin-top: 4px; font-style: italic; }
+  /* ── Tiêu đề phụ trong trang 4: "THÔNG TIN CHA", "THÔNG TIN MẸ", ... ── */
   .subsection-title {
     font-size: 0.95rem;
     font-weight: 700;
@@ -48,6 +78,7 @@
     text-transform: uppercase;
     letter-spacing: 0.4px;
   }
+  /* ── Hàng chứa subsection-title + checkbox "Không có thông tin" ── */
   .subsection-head {
     display: flex;
     justify-content: space-between;
@@ -55,6 +86,7 @@
     gap: 10px;
     margin: 14px 0 10px;
   }
+  /* ── Checkbox + label cho phép bỏ qua một nhóm field (cha/giám hộ/anh chị em) ── */
   .skip-toggle {
     display: inline-flex;
     align-items: center;
@@ -69,6 +101,7 @@
     height: 15px;
     accent-color: #1565c0;
   }
+  /* ── Nền xám nhạt bao quanh nhóm field cha/mẹ/giám hộ/anh chị em ── */
   .subsection-box {
     background: #f8faff;
     border: 1px solid #e3eaf5;
@@ -76,6 +109,7 @@
     padding: 14px 14px 8px;
     margin-bottom: 14px;
   }
+  /* ── Input có đơn vị đi kèm (cm, kg): input + badge liền nhau ── */
   .input-with-unit {
     display: flex;
     align-items: stretch;
@@ -84,6 +118,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
+  /* ── Badge đơn vị "cm" / "kg" gắn bên phải ô nhập ── */
   .unit-badge {
     min-width: 52px;
     display: inline-flex;
@@ -118,16 +153,21 @@
     height: 16px;
     accent-color: #1565c0;
   }
+  /* ── Thanh nút "Quay lại" / "Tiếp theo" / "Hoàn tất & Gửi" ở đáy form ── */
   .actions { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; background: #f8faff; border-top: 1px solid #e8edf5; }
   .btn { padding: 11px 28px; border-radius: 8px; border: none; cursor: pointer; font-size: 1.02rem; font-weight: 600; transition: all 0.2s; }
-  .btn-back { background: #eceff1; color: #546e7a; }
+  .btn-back { background: #eceff1; color: #546e7a; }         /* nút Quay lại */
   .btn-back:hover { background: #cfd8dc; }
-  .btn-next { background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; }
+  .btn-next { background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; }  /* nút Tiếp theo */
   .btn-next:hover { background: linear-gradient(135deg, #1976d2, #1565c0); box-shadow: 0 4px 12px rgba(21,101,192,0.35); }
-  .btn-submit { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; }
+  .btn-submit { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; } /* nút Gửi (trang cuối) */
   .btn-submit:hover { box-shadow: 0 4px 12px rgba(46,125,50,0.35); }
+
+  /* ── Cơ chế ẩn/hiện trang: chỉ .page.active mới hiển thị (JS toggle class) ── */
   .page { display: none; }
   .page.active { display: block; }
+
+  /* ── Trang 6: màn hình thành công sau khi gửi ── */
   .success-box { text-align: center; padding: 40px 28px; }
   .success-icon { font-size: 4rem; margin-bottom: 16px; }
   .success-box h2 { color: #2e7d32; font-size: 1.4rem; margin-bottom: 10px; }
@@ -145,7 +185,7 @@
     .steps { display: none; }
     .form-body { padding: 20px; }
   }
-  /* Tom Select overrides */
+  /* ── Tom Select overrides: ghi đè style thư viện để khớp thiết kế form ── */
   .ts-wrapper { width: 100%; }
   .ts-control {
     padding: 10px 14px !important;
@@ -176,13 +216,19 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 </head>
 <body>
+<!-- ===== KHUNG BÊN NGOÀI: 1 thẻ .card trắng, căn giữa trang ===== -->
 <div class="container">
 <div class="card">
+  <!-- Tiêu đề hình thức, không chứa input -->
   <div class="header">
     <h1>📋 PHIẾU THÔNG TIN HỌC SINH</h1>
     <p>Vui lòng điền đầy đủ và chính xác theo giấy tờ tùy thân</p>
   </div>
+
+  <!-- Thanh tiến trình: JS cập nhật width= theo (currentPage/5)*100% -->
   <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+
+  <!-- Các bước 1-5: JS thêm class .active (đang ở) hoặc .done (đã qua) -->
   <div class="steps">
     <div class="step active" id="step1"><div class="step-num">1</div>Thông tin cơ bản</div>
     <div class="step" id="step2"><div class="step-num">2</div>Thông tin cư trú</div>
@@ -191,17 +237,27 @@
     <div class="step" id="step5"><div class="step-num">5</div>Thông tin khác</div>
   </div>
 
-  <!-- PAGE 1: Thông tin cơ bản -->
+  <!-- ================================================================
+       PAGE 1: THÔNG TIN CƠ BẢN
+       Gồm: Họ tên, Đối tượng CS, Ngày sinh, Giới tính, Lớp, Cơ sở,
+             Dân tộc, Quốc tịch, BHYT miễn phí, CCCD, BHYT, SĐT HS,
+             Chiều cao, Cân nặng
+       class="page active" → trang đầu tiên được hiển thị sẵn
+  ================================================================ -->
   <div class="page active" id="page1">
     <div class="form-body">
       <div class="section-title">1. Thông tin cơ bản</div>
       <p class="hint" style="margin-bottom:18px">Ghi theo Căn Cước Công Dân của Học Sinh</p>
+
+      <!-- Hàng 1: Họ và tên | Đối tượng chính sách (2 cột) -->
       <div class="row2">
+        <!-- [FIELD] hoTen – Câu hỏi: Họ và tên học sinh (text tự do) -->
         <div class="field-group">
           <label>Họ và tên <span class="req">*</span></label>
           <input type="text" id="hoTen" placeholder="Ví dụ: Nguyễn Văn An">
           <div class="error-msg" id="err_hoTen">Vui lòng nhập họ và tên</div>
         </div>
+        <!-- [FIELD] doiTuong – Câu hỏi: Đối tượng chính sách (dropdown nhiều lựa chọn) -->
         <div class="field-group">
           <label>Đối tượng chính sách <span class="req">*</span></label>
           <select id="doiTuong">
@@ -229,6 +285,10 @@
           <div class="error-msg" id="err_doiTuong">Vui lòng chọn đối tượng chính sách</div>
         </div>
       </div>
+
+      <!-- Hàng 2: Ngày sinh | Giới tính (2 cột) -->
+      <!-- [FIELD] ngaySinh – date mask dd/mm/yyyy (JS xử lý tự chèn /) -->
+      <!-- [FIELD] gioiTinh – dropdown Nam/Nữ -->
       <div class="row2">
         <div class="field-group">
           <label>Ngày sinh <span class="req">*</span></label>
@@ -245,6 +305,10 @@
           <div class="error-msg" id="err_gioiTinh">Vui lòng chọn giới tính</div>
         </div>
       </div>
+
+      <!-- Hàng 3: Lớp | Cơ sở (2 cột) -->
+      <!-- [FIELD] lop – dropdown danh sách lớp (6E → 12C9) -->
+      <!-- [FIELD] coSo – dropdown Cơ sở 1/2 -->
       <div class="row2">
         <div class="field-group">
           <label>Lớp <span class="req">*</span></label>
@@ -327,6 +391,10 @@
           <div class="error-msg" id="err_coSo">Vui lòng chọn cơ sở</div>
         </div>
       </div>
+
+      <!-- Hàng 4: Dân tộc | Quốc tịch (2 cột) -->
+      <!-- [FIELD] danToc – dropdown 54 dân tộc Việt Nam -->
+      <!-- [FIELD] quocTich – dropdown các quốc tịch -->
       <div class="row2">
         <div class="field-group">
           <label>Dân tộc <span class="req">*</span></label>
@@ -527,6 +595,20 @@
           <div class="error-msg" id="err_quocTich">Vui lòng chọn quốc tịch</div>
         </div>
       </div>
+
+      <!-- [FIELD] bhyt_mienPhi – Câu hỏi: HS có thuộc diện BHYT miễn phí? (dropdown 2 lựa chọn) -->
+      <div class="field-group"> HS có thuộc diện cấp Bảo Hiểm Y Tế miễn phí không? <span class="req">*</span></label>
+        <select id="bhyt_mienPhi">
+          <option value="">-- Chọn --</option>
+          <option value="Có (nhà nước cấp)">Có (nhà nước cấp)</option>
+          <option value="Không (nhà trường mua hộ)">Không (nhà trường mua hộ)</option>
+        </select>
+        <div class="error-msg" id="err_bhyt_mienPhi">Vui lòng chọn</div>
+      </div>
+
+      <!-- Hàng 5: CCCD | Số thẻ BHYT/BHXH (2 cột) -->
+      <!-- [FIELD] cccd – Mã định danh/CCCD: chỉ nhận 12 chữ số (JS filter) -->
+      <!-- [FIELD] bhyt  – Số thẻ BHYT/BHXH: 10 hoặc 15 ký tự alphanum (JS uppercase) -->
       <div class="row2">
         <div class="field-group">
           <label>Mã định danh / CCCD <span class="req">*</span></label>
@@ -541,6 +623,11 @@
           <div class="error-msg" id="err_bhyt">Số thẻ BHYT/BHXH phải có 10 hoặc 15 ký tự chữ/số</div>
         </div>
       </div>
+
+      <!-- Hàng 6: SĐT học sinh | Chiều cao (cm) | Cân nặng (kg) (3 cột) -->
+      <!-- [FIELD] sdt_hs   – 10 chữ số (JS filter) -->
+      <!-- [FIELD] chieucao – số thực, JS chuyển dấu phẩy → chấm -->
+      <!-- [FIELD] cannang  – số thực, JS chuyển dấu phẩy → chấm -->
       <div class="row3">
         <div class="field-group">
           <label>Số điện thoại học sinh <span class="req">*</span></label>
@@ -626,22 +713,18 @@
         <div class="error-msg" id="err_ns_benhvien">Vui lòng chọn hoặc nhập bệnh viện/cơ sở y tế</div>
       </div>
       <hr style="border:none;border-top:1.5px solid #e3eaf5;margin:22px 0 14px">
-      <p style="font-weight:700;color:#1565c0;font-size:0.95rem;margin-bottom:6px">Quê quán (Trước sát nhập)</p>
-      <p class="hint" style="margin-bottom:18px">Ghi theo mục Quê Quán trên Giấy Khai Sinh của Học Sinh</p>
+      <!-- Quê quán: 2 cấp (Tỉnh → Xã/Phường) dùng data1 (sau sáp nhập) -->
+      <p style="font-weight:700;color:#1565c0;font-size:0.95rem;margin-bottom:6px">Quê quán (Sau sát nhập)</p>
+      <p class="hint" style="margin-bottom:18px">Ghi theo mục Quê Quán trên Giấy Khai Sinh của Học Sinh, chú ý nếu Quê Quán là địa chỉ cũ thì cần tra cứu địa chỉ mới theo địa chỉ cũ trên trang web <a href="https://diachi.io/" target="_blank" rel="noopener noreferrer">Tra cứu địa chỉ sau sáp nhập (diachi.io)</a></p>
+      <!-- Dropdown Tỉnh → khi chọn sẽ tự động nạp danh sách Xã/Phường bên dưới -->
       <div class="field-group">
         <label>Tỉnh/Thành phố <span class="req">*</span></label>
-        <select id="qq_tinh" onchange="cascadeHuyen('qq_tinh','qq_huyen','qq_xa', dataMerged)">
+        <select id="qq_tinh" onchange="cascadeXa('qq_tinh','qq_xa', data1)">
           <option value="">-- Chọn tỉnh/thành phố --</option>
         </select>
         <div class="error-msg" id="err_qq_tinh">Vui lòng chọn tỉnh/thành phố</div>
       </div>
-      <div class="field-group">
-        <label>Quận/Huyện <span class="req">*</span></label>
-        <select id="qq_huyen" disabled onchange="cascadeXaFromHuyen('qq_huyen','qq_xa','qq_tinh', dataMerged)">
-          <option value="">-- Chọn quận/huyện --</option>
-        </select>
-        <div class="error-msg" id="err_qq_huyen">Vui lòng chọn quận/huyện</div>
-      </div>
+      <!-- Dropdown Xã/Phường: tự động được nạp khi chọn Tỉnh ở trên -->
       <div class="field-group">
         <label>Xã/Phường <span class="req">*</span></label>
         <select id="qq_xa" disabled>
@@ -753,7 +836,7 @@
         </div>
       </div>
 
-      <div class="subsection-title">Anh/Chị/Em <span class="req">*</span></div>
+      <div class="subsection-title">Thông Tin Thêm <span class="req">*</span></div>
       <div class="subsection-box">
         <div class="row2">
           <div class="field-group">
@@ -769,17 +852,30 @@
             <div class="error-msg" id="err_so_ace">Vui lòng chọn số lượng anh/chị/em</div>
           </div>
           <div class="field-group">
-            <label>Gia đình thuộc diện <span class="req">*</span></label>
-            <select id="gd_dien">
-              <option value="">-- Chọn --</option>
-              <option value="Bình thường">Bình thường</option>
-              <option value="Hộ nghèo">Hộ nghèo</option>
-              <option value="Cận nghèo">Cận nghèo</option>
-              <option value="Gia đình chính sách">Gia đình chính sách</option>
-              <option value="Gia đình có công với cách mạng">Gia đình có công với cách mạng</option>
-              <option value="Khác">Khác</option>
-            </select>
+            <label>GĐ thuộc diện (có giấy chứng nhận) <span class="req">*</span></label>
+            <select id="gd_dien_sel"><option value="">-- Chọn --</option></select>
+            <input type="text" id="gd_dien_txt" placeholder="Nhập diện gia đình..." oninput="onGdDienTxt()" style="display:none;margin-top:6px">
+            <input type="hidden" id="gd_dien">
             <div class="error-msg" id="err_gd_dien">Vui lòng chọn diện gia đình</div>
+          </div>
+        </div>
+        <div class="row3" style="margin-top:14px">
+          <div class="field-group">
+            <label>Số tài khoản PHHS <span class="req">*</span></label>
+            <input type="text" id="so_tk_phhs" placeholder="Nhập số tài khoản" inputmode="numeric">
+            <div class="error-msg" id="err_so_tk_phhs">Vui lòng nhập số tài khoản</div>
+          </div>
+          <div class="field-group">
+            <label>Tên chủ tài khoản <span class="req">*</span></label>
+            <input type="text" id="ten_chu_tk" placeholder="Nhập tên chủ tài khoản">
+            <div class="error-msg" id="err_ten_chu_tk">Vui lòng nhập tên chủ tài khoản</div>
+          </div>
+          <div class="field-group">
+            <label>Tên ngân hàng <span class="req">*</span></label>
+            <select id="ten_ngan_hang_sel"><option value="">-- Chọn ngân hàng --</option></select>
+            <input type="text" id="ten_ngan_hang_txt" placeholder="Nhập tên ngân hàng..." oninput="onNganHangTxt()" style="display:none;margin-top:6px">
+            <input type="hidden" id="ten_ngan_hang">
+            <div class="error-msg" id="err_ten_ngan_hang">Vui lòng chọn hoặc nhập tên ngân hàng</div>
           </div>
         </div>
       </div>
@@ -883,17 +979,10 @@
       <div class="section-title">5. Thông tin khác</div>
       <div class="field-group">
         <label>HS đã tham gia thi chọn HSG cấp tỉnh/thành phố chưa? <span class="req">*</span></label>
-        <select id="hsg_thamgia">
-          <option value="">-- Chọn --</option>
-          <option value="Đã tham gia">Đã tham gia</option>
-          <option value="Chưa tham gia">Chưa tham gia</option>
-        </select>
+        <select id="hsg_thamgia_sel"><option value="">-- Chọn --</option></select>
+        <input type="text" id="hsg_thamgia_txt" placeholder="Nhập kết quả..." oninput="onHsgThamgiaTxt()" style="display:none;margin-top:6px">
+        <input type="hidden" id="hsg_thamgia">
         <div class="error-msg" id="err_hsg_thamgia">Vui lòng chọn</div>
-      </div>
-      <div class="field-group">
-        <label>Nếu có tham gia, đạt giải mấy? <span class="req">*</span></label>
-        <input type="text" id="hsg_giai" placeholder="Ví dụ: Giải nhất, Giải ba, Khuyến khích...">
-        <div class="error-msg" id="err_hsg_giai">Vui lòng nhập nội dung giải đạt được</div>
       </div>
       <div class="field-group">
         <label>HS có đạt giải thưởng đặc biệt gì không? <span class="req">*</span></label>
@@ -902,25 +991,21 @@
       </div>
       <div class="field-group">
         <label>HS có năng khiếu đặc biệt gì không? <span class="req">*</span></label>
-        <input type="text" id="nangkhieu" placeholder="Ví dụ: Vẽ, Đàn, Bóng đá, Bơi lội...">
+        <input type="text" id="nangkhieu" placeholder="Ví dụ: Hát, Vẽ, Đàn, Bóng đá, Bơi lội...">
         <div class="error-msg" id="err_nangkhieu">Vui lòng nhập năng khiếu</div>
       </div>
       <div class="field-group">
         <label>HS đã tham gia làm Ban cán sự lớp chưa? <span class="req">*</span></label>
-        <select id="bcs_lop">
-          <option value="">-- Chọn --</option>
-          <option value="Đã tham gia">Đã tham gia</option>
-          <option value="Chưa tham gia">Chưa tham gia</option>
-        </select>
+        <select id="bcs_lop_sel"><option value="">-- Chọn --</option></select>
+        <input type="text" id="bcs_lop_txt" placeholder="Nhập vai trò..." oninput="onBcsLopTxt()" style="display:none;margin-top:6px">
+        <input type="hidden" id="bcs_lop">
         <div class="error-msg" id="err_bcs_lop">Vui lòng chọn</div>
       </div>
       <div class="field-group">
         <label>Phụ huynh đã từng tham gia Ban chi hội trường/lớp chưa? <span class="req">*</span></label>
-        <select id="ph_banhoi">
-          <option value="">-- Chọn --</option>
-          <option value="Đã tham gia">Đã tham gia</option>
-          <option value="Chưa tham gia">Chưa tham gia</option>
-        </select>
+        <select id="ph_banhoi_sel"><option value="">-- Chọn --</option></select>
+        <input type="text" id="ph_banhoi_txt" placeholder="Nhập vai trò..." oninput="onPhBanHoiTxt()" style="display:none;margin-top:6px">
+        <input type="hidden" id="ph_banhoi">
         <div class="error-msg" id="err_ph_banhoi">Vui lòng chọn</div>
       </div>
       <div class="field-group">
@@ -929,19 +1014,6 @@
         <input type="text" id="dinhhuong_nghe_txt" placeholder="Nhập nghề nghiệp..." oninput="onDinhHuongTxt()" style="display:none;margin-top:6px">
         <input type="hidden" id="dinhhuong_nghe">
         <div class="error-msg" id="err_dinhhuong_nghe">Vui lòng nhập định hướng nghề nghiệp</div>
-      </div>
-      <div class="field-group">
-        <label>Nguyện vọng đăng kí dịch vụ tại trường <span class="req">*</span></label>
-        <div class="checkbox-grid">
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Bán trú"> Bán trú</label>
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Xe đưa đón"> Xe đưa đón</label>
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Học phụ đạo"> Học phụ đạo</label>
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Câu lạc bộ ngoại khóa"> Câu lạc bộ ngoại khóa</label>
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Bồi dưỡng năng khiếu"> Bồi dưỡng năng khiếu</label>
-          <label class="checkbox-item"><input type="checkbox" name="nguyenvong_dichvu" value="Khác"> Khác</label>
-        </div>
-        <input type="text" id="nguyenvong_dichvu_khac" placeholder="thêm thông tin nhu cầu của phụ huynh & học sinh về các dịch vụ" style="margin-top:10px">
-        <div class="error-msg" id="err_nguyenvong_dichvu">Vui lòng chọn dịch vụ hoặc nhập thêm nhu cầu dịch vụ</div>
       </div>
       <div class="field-group">
         <label>Những điều PH/HS mong muốn khi học tại trường <span class="req">*</span></label>
@@ -977,8 +1049,7 @@ const totalPages = 5;
 
 // Init dropdowns
 function initDropdowns() {
-  ['tt_tinh','cn_tinh'].forEach(id => fillTinh(id, data1));
-  ['qq_tinh'].forEach(id => fillTinh(id, dataMerged));
+  ['tt_tinh','cn_tinh','qq_tinh'].forEach(id => fillTinh(id, data1));
 }
 
 function fillTinh(selId, data) {
@@ -1105,6 +1176,7 @@ function validatePage(p) {
     if (!/^\d{12}$/.test(cccd)) ok = showErr('cccd', true) && false; else showErr('cccd', false);
     const bhyt = val('bhyt');
     if (!/^([A-Za-z0-9]{10}|[A-Za-z0-9]{15})$/.test(bhyt)) ok = showErr('bhyt', true) && false; else showErr('bhyt', false);
+    if (!val('bhyt_mienPhi')) ok = showErr('bhyt_mienPhi', true) && false; else showErr('bhyt_mienPhi', false);
     const chieuCao = val('chieucao');
     if (!/^\d+(\.\d+)?$/.test(chieuCao)) ok = showErr('chieucao', true) && false; else showErr('chieucao', false);
     const canNang = val('cannang');
@@ -1118,7 +1190,6 @@ function validatePage(p) {
   } else if (p === 3) {
     if (!val('ns_benhvien')) ok = showErr('ns_benhvien', true) && false; else showErr('ns_benhvien', false);
     if (!val('qq_tinh')) ok = showErr('qq_tinh', true) && false; else showErr('qq_tinh', false);
-    if (!val('qq_huyen')) ok = showErr('qq_huyen', true) && false; else showErr('qq_huyen', false);
     if (!val('qq_xa')) ok = showErr('qq_xa', true) && false; else showErr('qq_xa', false);
   } else if (p === 4) {
     if (!isChecked('skip_cha')) {
@@ -1148,7 +1219,10 @@ function validatePage(p) {
     }
 
     if (!val('so_ace')) ok = showErr('so_ace', true) && false; else showErr('so_ace', false);
-    if (!val('gd_dien')) ok = showErr('gd_dien', true) && false; else showErr('gd_dien', false);
+    if (!document.getElementById('gd_dien').value.trim()) ok = showErr('gd_dien', true) && false; else showErr('gd_dien', false);
+    if (!val('so_tk_phhs')) ok = showErr('so_tk_phhs', true) && false; else showErr('so_tk_phhs', false);
+    if (!val('ten_chu_tk')) ok = showErr('ten_chu_tk', true) && false; else showErr('ten_chu_tk', false);
+    if (!document.getElementById('ten_ngan_hang').value.trim()) ok = showErr('ten_ngan_hang', true) && false; else showErr('ten_ngan_hang', false);
 
     [['ace1','skip_ace1'],['ace2','skip_ace2'],['ace3','skip_ace3']].forEach(function(pair) {
       const prefix = pair[0];
@@ -1165,16 +1239,11 @@ function validatePage(p) {
     });
   } else if (p === 5) {
     if (!val('hsg_thamgia')) ok = showErr('hsg_thamgia', true) && false; else showErr('hsg_thamgia', false);
-    if (!val('hsg_giai')) ok = showErr('hsg_giai', true) && false; else showErr('hsg_giai', false);
     if (!val('bcs_lop')) ok = showErr('bcs_lop', true) && false; else showErr('bcs_lop', false);
     if (!val('nangkhieu')) ok = showErr('nangkhieu', true) && false; else showErr('nangkhieu', false);
     if (!val('giaithuong_db')) ok = showErr('giaithuong_db', true) && false; else showErr('giaithuong_db', false);
     if (!val('ph_banhoi')) ok = showErr('ph_banhoi', true) && false; else showErr('ph_banhoi', false);
     if (!val('dinhhuong_nghe')) ok = showErr('dinhhuong_nghe', true) && false; else showErr('dinhhuong_nghe', false);
-
-    const selectedDichVu = Array.from(document.querySelectorAll('input[name="nguyenvong_dichvu"]:checked')).map(el => el.value);
-    const ghiThemDichVu = val('nguyenvong_dichvu_khac');
-    if (!selectedDichVu.length && !ghiThemDichVu) ok = showMsg('err_nguyenvong_dichvu', true) && false; else showMsg('err_nguyenvong_dichvu', false);
 
     if (!document.getElementById('mongmuon').value.trim()) ok = showErr('mongmuon', true) && false; else showErr('mongmuon', false);
   }
@@ -1302,37 +1371,49 @@ function getServicePreferences() {
 
 function submitForm() {
   const data = {
-    hoTen:      val('hoTen'),
-    doiTuong:   val('doiTuong'),
-    lop:        val('lop'),
-    coSo:       val('coSo'),
-    ngaySinh:   val('ngaySinh'),
-    gioiTinh:   val('gioiTinh'),
-    danToc:     val('danToc'),
-    quocTich:   val('quocTich'),
-    tt_tinh:    val('tt_tinh'),
-    tt_xa:      val('tt_xa'),
-    cn_sonha:   val('cn_sonha'),
-    cn_tinh:    val('cn_tinh'),
-    cn_xa:      val('cn_xa'),
-    ns_benhvien:val('ns_benhvien'),
-    qq_tinh:    val('qq_tinh'),
-    qq_huyen:   val('qq_huyen'),
-    qq_xa:      val('qq_xa'),
+    // ─── Trang 1: Thông tin cơ bản ───
+    hoTen:           val('hoTen'),
+    doiTuong:        val('doiTuong'),
+    ngaySinh:        val('ngaySinh'),
+    gioiTinh:        val('gioiTinh'),
+    lop:             val('lop'),
+    coSo:            val('coSo'),
+    danToc:          val('danToc'),
+    quocTich:        val('quocTich'),
+    bhyt_mienPhi:    val('bhyt_mienPhi'),
+    cccd:            val('cccd'),
+    bhyt:            val('bhyt'),
+    sdt_hs:          val('sdt_hs'),
+    chieucao:        val('chieucao'),
+    cannang:         val('cannang'),
+    // ─── Trang 2: Thông tin cư trú ───
+    tt_tinh:         val('tt_tinh'),
+    tt_xa:           val('tt_xa'),
+    cn_sonha:        val('cn_sonha'),
+    cn_tinh:         val('cn_tinh'),
+    cn_xa:           val('cn_xa'),
+    // ─── Trang 3: Thông tin khai sinh ───
+    ns_benhvien:     val('ns_benhvien'),
+    qq_tinh:         val('qq_tinh'),
+    qq_xa:           val('qq_xa'),
+    // ─── Trang 4: Thông tin gia đình ───
     hoten_cha:       val('hoten_cha'),
     namsinh_cha:     val('namsinh_cha'),
     nghenghiep_cha:  val('nghenghiep_cha'),
+    sdt_cha:         val('sdt_cha'),
     hoten_me:        val('hoten_me'),
     namsinh_me:      val('namsinh_me'),
     nghenghiep_me:   val('nghenghiep_me'),
+    sdt_me:          val('sdt_me'),
     hoten_giamho:    val('hoten_giamho'),
     namsinh_giamho:  val('namsinh_giamho'),
     nghenghiep_giamho: val('nghenghiep_giamho'),
     sdt_giamho:      val('sdt_giamho'),
-    sdt_cha:         val('sdt_cha'),
-    sdt_me:          val('sdt_me'),
     so_ace:          val('so_ace'),
-    gd_dien:         val('gd_dien'),
+    gd_dien:         document.getElementById('gd_dien').value.trim(),
+    so_tk_phhs:      val('so_tk_phhs'),
+    ten_chu_tk:      val('ten_chu_tk'),
+    ten_ngan_hang:   document.getElementById('ten_ngan_hang').value.trim(),
     ace1_hoten:      val('ace1_hoten'),
     ace1_ngaysinh:   val('ace1_ngaysinh'),
     ace1_lop:        val('ace1_lop'),
@@ -1345,24 +1426,18 @@ function submitForm() {
     ace3_ngaysinh:   val('ace3_ngaysinh'),
     ace3_lop:        val('ace3_lop'),
     ace3_truong:     val('ace3_truong'),
-    sdt_hs:          val('sdt_hs'),
-    cccd:            val('cccd'),
-    bhyt:            val('bhyt'),
-    chieucao:        val('chieucao'),
-    cannang:         val('cannang'),
-    hsg_thamgia:     val('hsg_thamgia'),
-    hsg_giai:        val('hsg_giai'),
+    // ─── Trang 5: Thông tin khác ───
+    hsg_thamgia:     document.getElementById('hsg_thamgia').value.trim(),
     bcs_lop:         val('bcs_lop'),
     nangkhieu:       val('nangkhieu'),
     giaithuong_db:   val('giaithuong_db'),
     ph_banhoi:       val('ph_banhoi'),
     dinhhuong_nghe:  val('dinhhuong_nghe'),
-    nguyenvong_dichvu: getServicePreferences(),
     mongmuon:        document.getElementById('mongmuon').value.trim(),
   };
 
   // ← Dán URL Web App của bạn vào đây
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3rRFJt_msLIh37_5mc3THm9z-2u2AHouasj5cXe_9JQjRYvWIPgMPWU397F9iyBY6/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzj5tRAUjru0K8ilqhFfoKlgfYEgAF1WE-YxktbAJR87e0X4H1Kfl-cvAa_KkBNMELe/exec';
 
   const btnNext = document.getElementById('btnNext');
   btnNext.disabled = true;
@@ -1391,18 +1466,19 @@ function showSummary(data) {
     danToc:'Dân tộc', quocTich:'Quốc tịch', tt_tinh:'Thường trú - Tỉnh/TP', tt_xa:'Thường trú - Xã/Phường',
     cn_sonha:'Chỗ ở - Số nhà', cn_tinh:'Chỗ ở - Tỉnh/TP', cn_xa:'Chỗ ở - Xã/Phường',
     ns_benhvien:'Nơi sinh - Bệnh viện',
-    qq_tinh:'Quê quán - Tỉnh/TP', qq_huyen:'Quê quán - Quận/Huyện', qq_xa:'Quê quán - Xã/Phường',
+    qq_tinh:'Quê quán - Tỉnh/TP', qq_xa:'Quê quán - Xã/Phường',
     hoten_cha:'Họ tên cha', namsinh_cha:'Năm sinh cha', nghenghiep_cha:'Nghề nghiệp cha',
     hoten_me:'Họ tên mẹ', namsinh_me:'Năm sinh mẹ', nghenghiep_me:'Nghề nghiệp mẹ',
     hoten_giamho:'Họ tên người giám hộ', namsinh_giamho:'Năm sinh người giám hộ', nghenghiep_giamho:'Nghề nghiệp người giám hộ', sdt_giamho:'Số điện thoại người giám hộ',
-    sdt_cha:'SĐT bố', sdt_me:'SĐT mẹ', so_ace:'Số anh/chị/em', gd_dien:'Gia đình thuộc diện',
+    sdt_cha:'SĐT bố', sdt_me:'SĐT mẹ', so_ace:'Số anh/chị/em', gd_dien:'GĐ thuộc diện',
+    so_tk_phhs:'Số tài khoản PHHS', ten_chu_tk:'Tên chủ tài khoản', ten_ngan_hang:'Tên ngân hàng',
     ace1_hoten:'ACE 1 - Họ tên', ace1_ngaysinh:'ACE 1 - Ngày sinh', ace1_lop:'ACE 1 - Lớp', ace1_truong:'ACE 1 - Trường',
     ace2_hoten:'ACE 2 - Họ tên', ace2_ngaysinh:'ACE 2 - Ngày sinh', ace2_lop:'ACE 2 - Lớp', ace2_truong:'ACE 2 - Trường',
     ace3_hoten:'ACE 3 - Họ tên', ace3_ngaysinh:'ACE 3 - Ngày sinh', ace3_lop:'ACE 3 - Lớp', ace3_truong:'ACE 3 - Trường',
-    sdt_hs:'SĐT học sinh', cccd:'CCCD/Mã định danh', bhyt:'Số thẻ BHYT/BHXH', chieucao:'Chiều cao (cm)', cannang:'Cân nặng (kg)',
-    hsg_thamgia:'Tham gia thi HSG', hsg_giai:'Giải HSG đạt được', bcs_lop:'Tham gia BCS lớp',
+    sdt_hs:'SĐT học sinh', cccd:'CCCD/Mã định danh', bhyt:'Số thẻ BHYT/BHXH', bhyt_mienPhi:'BHYT miễn phí', chieucao:'Chiều cao (cm)', cannang:'Cân nặng (kg)',
+    hsg_thamgia:'Kết quả thi HSG tỉnh/TP', bcs_lop:'Tham gia BCS lớp',
     nangkhieu:'Năng khiếu', giaithuong_db:'Giải thưởng đặc biệt', ph_banhoi:'PH tham gia Ban chi hội',
-    dinhhuong_nghe:'Định hướng nghề nghiệp', nguyenvong_dichvu:'Nguyện vọng dịch vụ trường', mongmuon:'Mong muốn của PH/HS'
+    dinhhuong_nghe:'Định hướng nghề nghiệp', mongmuon:'Mong muốn của PH/HS'
   };
   const html = Object.entries(data).map(([k,v]) =>
     `<div class="summary-item">
@@ -1476,6 +1552,22 @@ function onNoiSinhTxt() {
 function onDinhHuongTxt() {
   document.getElementById('dinhhuong_nghe').value =
     document.getElementById('dinhhuong_nghe_txt').value;
+}
+
+function onGdDienTxt() {
+  document.getElementById('gd_dien').value = document.getElementById('gd_dien_txt').value;
+}
+function onHsgThamgiaTxt() {
+  document.getElementById('hsg_thamgia').value = document.getElementById('hsg_thamgia_txt').value;
+}
+function onBcsLopTxt() {
+  document.getElementById('bcs_lop').value = document.getElementById('bcs_lop_txt').value;
+}
+function onPhBanHoiTxt() {
+  document.getElementById('ph_banhoi').value = document.getElementById('ph_banhoi_txt').value;
+}
+function onNganHangTxt() {
+  document.getElementById('ten_ngan_hang').value = document.getElementById('ten_ngan_hang_txt').value;
 }
 
 (function initNgheSelects() {
@@ -1777,9 +1869,9 @@ function initSkipToggles() {
     'gioiTinh','lop','coSo','doiTuong','danToc','quocTich',
     'tt_tinh','tt_xa',
     'cn_tinh','cn_xa',
-    'qq_tinh','qq_huyen','qq_xa',
-    'so_ace','gd_dien',
-    'hsg_thamgia','bcs_lop','ph_banhoi'
+    'qq_tinh','qq_xa',
+    'so_ace',
+    'bhyt_mienPhi'
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -1792,6 +1884,134 @@ function initSkipToggles() {
         if (el.disabled) this.disable();
       }
     });
+  });
+})(); // initNganHangSelect
+
+(function initHsgThamgiaSelect() {
+  const selId = 'hsg_thamgia_sel';
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const HSG_LIST = [
+    'Giải Nhất tỉnh/thành phố',
+    'Giải Nhì tỉnh/thành phố',
+    'Giải Ba tỉnh/thành phố',
+    'Giải Khuyến khích tỉnh/thành phố',
+    'Chưa tham gia'
+  ];
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
+  sel.appendChild(customOpt);
+  HSG_LIST.forEach(function(name) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name; sel.appendChild(opt);
+  });
+  tsInstances[selId] = new TomSelect(sel, {
+    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
+    onChange: function(v) {
+      const txt = document.getElementById('hsg_thamgia_txt');
+      const hid = document.getElementById('hsg_thamgia');
+      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
+      else { txt.style.display = 'none'; hid.value = v; }
+    }
+  });
+})();
+
+(function initGdDienSelect() {
+  const selId = 'gd_dien_sel';
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const GD_DIEN_LIST = ['Bình thường','Hộ nghèo','Cận nghèo','Gia đình chính sách','Gia đình có công với cách mạng'];
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
+  sel.appendChild(customOpt);
+  GD_DIEN_LIST.forEach(function(name) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name; sel.appendChild(opt);
+  });
+  tsInstances[selId] = new TomSelect(sel, {
+    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
+    onChange: function(v) {
+      const txt = document.getElementById('gd_dien_txt');
+      const hid = document.getElementById('gd_dien');
+      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
+      else { txt.style.display = 'none'; hid.value = v; }
+    }
+  });
+})();
+
+(function initBcsLopSelect() {
+  const selId = 'bcs_lop_sel';
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const BCS_LIST = ['Lớp trưởng','Bí thư','Lớp phó văn thể','Lớp phó đời sống','Lớp phó lao động','Tổ trưởng','Chưa tham gia'];
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
+  sel.appendChild(customOpt);
+  BCS_LIST.forEach(function(name) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name; sel.appendChild(opt);
+  });
+  tsInstances[selId] = new TomSelect(sel, {
+    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
+    onChange: function(v) {
+      const txt = document.getElementById('bcs_lop_txt');
+      const hid = document.getElementById('bcs_lop');
+      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
+      else { txt.style.display = 'none'; hid.value = v; }
+    }
+  });
+})();
+
+(function initPhBanHoiSelect() {
+  const selId = 'ph_banhoi_sel';
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const PH_LIST = ['Chi hội trưởng','Chi hội phó','Thủ quỷ','Ủy viên','Chưa tham gia'];
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
+  sel.appendChild(customOpt);
+  PH_LIST.forEach(function(name) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name; sel.appendChild(opt);
+  });
+  tsInstances[selId] = new TomSelect(sel, {
+    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
+    onChange: function(v) {
+      const txt = document.getElementById('ph_banhoi_txt');
+      const hid = document.getElementById('ph_banhoi');
+      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
+      else { txt.style.display = 'none'; hid.value = v; }
+    }
+  });
+})();
+
+(function initNganHangSelect() {
+  const selId = 'ten_ngan_hang_sel';
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const NH_LIST = [
+    'Vietcombank','VietinBank','BIDV','Agribank','MB Bank',
+    'Techcombank','ACB','VPBank','TPBank','Sacombank',
+    'HDBank','VIB','SHB','Eximbank','MSB','SeABank',
+    'LPBank','Nam A Bank','OCB','ABBank','NCB',
+    'BacABank','PGBank','Baoviet Bank','Saigonbank',
+    'Viet Capital Bank','VietABank','KienLong Bank'
+  ];
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
+  sel.appendChild(customOpt);
+  NH_LIST.forEach(function(name) {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name; sel.appendChild(opt);
+  });
+  tsInstances[selId] = new TomSelect(sel, {
+    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
+    onChange: function(v) {
+      const txt = document.getElementById('ten_ngan_hang_txt');
+      const hid = document.getElementById('ten_ngan_hang');
+      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
+      else { txt.style.display = 'none'; hid.value = v; }
+    }
   });
 })();
 
