@@ -1560,6 +1560,13 @@ function submitForm() {
   btnNext.disabled = true;
   btnNext.textContent = '⏳ Đang gửi...';
 
+  // 🔓 MỞ TAB TRƯỚC KHI FETCH để bypass popup blocker
+  // Tab này sẽ được cập nhật URL khi server trả về PDF
+  const pdfTab = window.open('about:blank', '_blank');
+  if (pdfTab) {
+    pdfTab.document.write('<html><head><title>Đang tạo phiếu...</title></head><body style="font-family:Arial;text-align:center;padding:50px"><h2>⏳ Đang tạo phiếu PDF...</h2><p>Vui lòng chờ trong giây lát</p></body></html>');
+  }
+
   fetch(SCRIPT_URL, {
     method: 'POST',
     // text/plain tránh CORS preflight; Apps Script vẫn nhận được nội dung JSON
@@ -1570,18 +1577,23 @@ function submitForm() {
   .then(result => {
     const pdfUrl = (result && result.pdfUrl) ? result.pdfUrl : '';
     if (pdfUrl) {
-      // Tự động mở link tải PDF trong tab mới
-      const a = document.createElement('a');
-      a.href = pdfUrl;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // ✅ Cập nhật URL của tab đã mở trước đó
+      if (pdfTab && !pdfTab.closed) {
+        pdfTab.location.href = pdfUrl;
+      } else {
+        // Fallback: nếu tab bị đóng hoặc không mở được, dùng window.location
+        alert('Tab tải xuống đã bị chặn hoặc đóng. Tải xuống sẽ bắt đầu trong cửa sổ hiện tại.');
+        window.location.href = pdfUrl;
+      }
+    } else {
+      // Đóng tab nếu không có PDF
+      if (pdfTab && !pdfTab.closed) pdfTab.close();
     }
     showSummary(data, pdfUrl);
   })
   .catch(err => {
+    // Đóng tab loading nếu có lỗi
+    if (pdfTab && !pdfTab.closed) pdfTab.close();
     alert('Lỗi kết nối: ' + err.message + '\nVui lòng thử lại.');
     btnNext.disabled = false;
     btnNext.textContent = '✓ Gửi & Tải Về Phiếu Kết Quả';
