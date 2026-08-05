@@ -67,8 +67,8 @@
   .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
-  /* ── Chú thích nhỏ màu xám in nghiêng bên dưới input ── */
-  .hint { font-size: 0.95rem; color: #78909c; margin-top: 4px; font-style: italic; }
+  /* ── Chú thích nhỏ màu đỏ in nghiêng bên dưới input ── */
+  .hint { font-size: 0.95rem; color: #e53935; margin-top: 4px; font-style: italic; font-weight: 500; }
   /* ── Tiêu đề phụ trong trang 4: "THÔNG TIN CHA", "THÔNG TIN MẸ", ... ── */
   .subsection-title {
     font-size: 0.95rem;
@@ -153,7 +153,7 @@
     height: 16px;
     accent-color: #1565c0;
   }
-  /* ── Thanh nút "Quay lại" / "Tiếp theo" / "Hoàn tất & Gửi" ở đáy form ── */
+  /* ── Thanh nút "Quay lại" / "Tiếp theo" / "Gửi & Tải về Kết Quả" ở đáy form ── */
   .actions { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; background: #f8faff; border-top: 1px solid #e8edf5; }
   .btn { padding: 11px 28px; border-radius: 8px; border: none; cursor: pointer; font-size: 1.02rem; font-weight: 600; transition: all 0.2s; }
   .btn-back { background: #eceff1; color: #546e7a; }         /* nút Quay lại */
@@ -221,8 +221,21 @@
 <div class="card">
   <!-- Tiêu đề hình thức, không chứa input -->
   <div class="header">
-    <h1>📋 PHIẾU THÔNG TIN HỌC SINH</h1>
-    <p>Vui lòng điền đầy đủ và chính xác theo giấy tờ tùy thân</p>
+  <h1>📋 PHIẾU THU THẬP THÔNG TIN HỌC SINH</h1>
+  <p>Kính gửi Quý Phụ huynh, nhằm cập nhật <strong>Học bạ số</strong> theo quy định của <strong>Sở GD&ĐT</strong> và hỗ trợ <strong>Công tác Giáo dục</strong> của <strong>Nhà Trường</strong>, kính mong Quý Phụ huynh hoàn thành phiếu thông tin dưới đây.</p>
+
+  <div class="notice-box">
+    <p>📌 <strong>Giấy tờ cần chuẩn bị:</strong></p>
+    <ul style="margin-left: 40px;">
+        <li>Căn cước công dân của học sinh</li>
+        <li>Giấy khai sinh của học sinh</li>
+    </ul>
+
+    <p>⚠️ <strong>Lưu ý:</strong> Thông tin cần <strong>chính xác tuyệt đối</strong> vì sẽ được in ra để Phụ huynh ký xác nhận.</p>
+    <p>💡 <em>Gợi ý: Nên phối hợp 2 người (1 người đọc giấy tờ & tra cứu thông tin, 1 người nhập) để tránh sai sót.</em></p>
+    </div>
+
+    <p>Trân trọng cảm ơn Quý Phụ huynh!</p>
   </div>
 
   <!-- Thanh tiến trình: JS cập nhật width= theo (currentPage/5)*100% -->
@@ -247,42 +260,27 @@
   <div class="page active" id="page1">
     <div class="form-body">
       <div class="section-title">1. Thông tin cơ bản</div>
-      <p class="hint" style="margin-bottom:18px">Ghi theo Căn Cước Công Dân của Học Sinh</p>
+      <p class="hint" style="margin-bottom:18px">Ghi theo Căn Cước Công Dân của Học Sinh và các Giấy tờ/Thông tin thực tế khác</p>
 
-      <!-- Hàng 1: Họ và tên | Đối tượng chính sách (2 cột) -->
+      <!-- Hàng 1: Họ và tên | SĐT học sinh (2 cột) -->
       <div class="row2">
-        <!-- [FIELD] hoTen – Câu hỏi: Họ và tên học sinh (text tự do) -->
         <div class="field-group">
+          <!-- [FIELD] hoTen – Câu hỏi: Họ và tên học sinh (text tự do) -->
           <label>Họ và tên <span class="req">*</span></label>
           <input type="text" id="hoTen" placeholder="Ví dụ: Nguyễn Văn An">
           <div class="error-msg" id="err_hoTen">Vui lòng nhập họ và tên</div>
         </div>
-        <!-- [FIELD] doiTuong – Câu hỏi: Đối tượng chính sách (dropdown nhiều lựa chọn) -->
         <div class="field-group">
-          <label>Đối tượng chính sách <span class="req">*</span></label>
-          <select id="doiTuong">
-            <option value="">-- Chọn đối tượng --</option>
-            <option value="Không thuộc đối tượng nào bên dưới">Không thuộc đối tượng nào bên dưới</option>
-            <option value="Con của người có công">Con của người có công</option>
-            <option value="Con anh hùng">Con anh hùng</option>
-            <option value="Con liệt sỹ">Con liệt sỹ</option>
-            <option value="Con thương binh, bệnh binh">Con thương binh, bệnh binh</option>
-            <option value="Mồ côi cả cha, mẹ">Mồ côi cả cha, mẹ</option>
-            <option value="Bị tàn tật, khuyết tật">Bị tàn tật, khuyết tật</option>
-            <option value="Bị bỏ rơi, mất nguồn nuôi dưỡng">Bị bỏ rơi, mất nguồn nuôi dưỡng</option>
-            <option value="Thuộc diện hộ nghèo theo quy định">Thuộc diện hộ nghèo theo quy định</option>
-            <option value="Thuộc hộ cận nghèo theo quy định">Thuộc hộ cận nghèo theo quy định</option>
-            <option value="Con của hạ SQ và BS, CS đang phục vụ có thời hạn trong LLVTg nhân dân">Con của hạ SQ và BS, CS đang phục vụ có thời hạn trong LLVTg nhân dân</option>
-            <option value="Hiện sống, học tập ở vùng đặc biệt khó khăn">Hiện sống, học tập ở vùng đặc biệt khó khăn</option>
-            <option value="Có cha mẹ là công nhân bị tai nạn hoặc mắc bệnh nghề nghiệp">Có cha mẹ là công nhân bị tai nạn hoặc mắc bệnh nghề nghiệp</option>
-            <option value="Có cha mẹ thường trú tại xã biên giới, vùng cao, hải đảo, xã ĐBKK">Có cha mẹ thường trú tại xã biên giới, vùng cao, hải đảo, xã ĐBKK</option>
-            <option value="Có cha mẹ thu nhập bằng 150% thu nhập hộ nghèo theo quy định">Có cha mẹ thu nhập bằng 150% thu nhập hộ nghèo theo quy định</option>
-            <option value="Con hộ nghèo thuộc CT135">Con hộ nghèo thuộc CT135</option>
-            <option value="Diện chính sách khác">Diện chính sách khác</option>
-            <option value="Học sinh, sinh viên hưởng chính sách bán trú theo QĐCP">Học sinh, sinh viên hưởng chính sách bán trú theo QĐCP</option>
-            <option value="Học sinh hưởng chính sách dân tộc nội trú theo QĐCP">Học sinh hưởng chính sách dân tộc nội trú theo QĐCP</option>
+          <!-- [FIELD] sdt_hs – Câu hỏi: Số điện thoại học sinh (dropdown + input điều kiện) -->
+          <label>Số điện thoại học sinh <span class="req">*</span></label>
+          <select id="sdt_hs_sel" onchange="onSdtHsSel()">
+            <option value="">-- Chọn --</option>
+            <option value="Có SĐT cá nhân">Có SĐT cá nhân</option>
+            <option value="Không có SĐT cá nhân">Không có SĐT cá nhân</option>
           </select>
-          <div class="error-msg" id="err_doiTuong">Vui lòng chọn đối tượng chính sách</div>
+          <input type="text" id="sdt_hs_txt" placeholder="Nhập 10 chữ số" inputmode="numeric" maxlength="10" pattern="\d{10}" style="display:none;margin-top:6px" oninput="onSdtHsTxt()">
+          <input type="hidden" id="sdt_hs">
+          <div class="error-msg" id="err_sdt_hs">Vui lòng chọn và nhập số điện thoại (nếu có)</div>
         </div>
       </div>
 
@@ -596,8 +594,37 @@
         </div>
       </div>
 
+      <!-- [FIELD] doiTuong – Câu hỏi: Đối tượng chính sách (dropdown nhiều lựa chọn) -->
+      <div class="field-group">
+        <label>Đối tượng chính sách (có giấy xác nhận) <span class="req">*</span></label>
+        <select id="doiTuong">
+          <option value="">-- Chọn đối tượng --</option>
+          <option value="Không thuộc đối tượng nào bên dưới">Không thuộc đối tượng nào bên dưới</option>
+          <option value="Con của người có công">Con của người có công</option>
+          <option value="Con anh hùng">Con anh hùng</option>
+          <option value="Con liệt sỹ">Con liệt sỹ</option>
+          <option value="Con thương binh, bệnh binh">Con thương binh, bệnh binh</option>
+          <option value="Mồ côi cả cha, mẹ">Mồ côi cả cha, mẹ</option>
+          <option value="Bị tàn tật, khuyết tật">Bị tàn tật, khuyết tật</option>
+          <option value="Bị bỏ rơi, mất nguồn nuôi dưỡng">Bị bỏ rơi, mất nguồn nuôi dưỡng</option>
+          <option value="Thuộc diện hộ nghèo theo quy định">Thuộc diện hộ nghèo theo quy định</option>
+          <option value="Thuộc hộ cận nghèo theo quy định">Thuộc hộ cận nghèo theo quy định</option>
+          <option value="Con của hạ SQ và BS, CS đang phục vụ có thời hạn trong LLVTg nhân dân">Con của hạ SQ và BS, CS đang phục vụ có thời hạn trong LLVTg nhân dân</option>
+          <option value="Hiện sống, học tập ở vùng đặc biệt khó khăn">Hiện sống, học tập ở vùng đặc biệt khó khăn</option>
+          <option value="Có cha mẹ là công nhân bị tai nạn hoặc mắc bệnh nghề nghiệp">Có cha mẹ là công nhân bị tai nạn hoặc mắc bệnh nghề nghiệp</option>
+          <option value="Có cha mẹ thường trú tại xã biên giới, vùng cao, hải đảo, xã ĐBKK">Có cha mẹ thường trú tại xã biên giới, vùng cao, hải đảo, xã ĐBKK</option>
+          <option value="Có cha mẹ thu nhập bằng 150% thu nhập hộ nghèo theo quy định">Có cha mẹ thu nhập bằng 150% thu nhập hộ nghèo theo quy định</option>
+          <option value="Con hộ nghèo thuộc CT135">Con hộ nghèo thuộc CT135</option>
+          <option value="Diện chính sách khác">Diện chính sách khác</option>
+          <option value="Học sinh, sinh viên hưởng chính sách bán trú theo QĐCP">Học sinh, sinh viên hưởng chính sách bán trú theo QĐCP</option>
+          <option value="Học sinh hưởng chính sách dân tộc nội trú theo QĐCP">Học sinh hưởng chính sách dân tộc nội trú theo QĐCP</option>
+        </select>
+        <div class="error-msg" id="err_doiTuong">Vui lòng chọn đối tượng chính sách</div>
+      </div>
+
       <!-- [FIELD] bhyt_mienPhi – Câu hỏi: HS có thuộc diện BHYT miễn phí? (dropdown 2 lựa chọn) -->
-      <div class="field-group"> HS có thuộc diện cấp Bảo Hiểm Y Tế miễn phí không? <span class="req">*</span></label>
+      <div class="field-group">
+        <label>HS có thuộc diện cấp Bảo Hiểm Y Tế miễn phí không? <span class="req">*</span></label>
         <select id="bhyt_mienPhi">
           <option value="">-- Chọn --</option>
           <option value="Có (nhà nước cấp)">Có (nhà nước cấp)</option>
@@ -606,33 +633,37 @@
         <div class="error-msg" id="err_bhyt_mienPhi">Vui lòng chọn</div>
       </div>
 
-      <!-- Hàng 5: CCCD | Số thẻ BHYT/BHXH (2 cột) -->
+      <!-- Hàng 5: Số thẻ BHYT | CCCD (2 cột) -->
+      <!-- [FIELD] bhyt  – Số thẻ BHYT: 10 hoặc 15 ký tự alphanum (JS uppercase) -->
       <!-- [FIELD] cccd – Mã định danh/CCCD: chỉ nhận 12 chữ số (JS filter) -->
-      <!-- [FIELD] bhyt  – Số thẻ BHYT/BHXH: 10 hoặc 15 ký tự alphanum (JS uppercase) -->
       <div class="row2">
+        <div class="field-group">
+          <label>Số thẻ bảo hiểm y tế<span class="req">*</span></label>
+          <input type="text" id="bhyt" placeholder="10 hoặc 15 ký tự" minlength="10" maxlength="15" pattern="([A-Za-z0-9]{10}|[A-Za-z0-9]{15})">
+          <p class="hint">Xem trên thẻ BHYT hoặc tra trên ứng dụng VssID bằng số ĐDCN/CCCD theo hướng dẫn: <a href="https://youtu.be/vCxV5EwweJo" target="_blank" rel="noopener noreferrer">https://youtu.be/vCxV5EwweJo</a></p>
+          <div class="error-msg" id="err_bhyt">Số thẻ BHYT phải có 10 hoặc 15 ký tự chữ/số</div>
+        </div>
         <div class="field-group">
           <label>Mã định danh / CCCD <span class="req">*</span></label>
           <input type="text" id="cccd" placeholder="Nhập 12 chữ số" inputmode="numeric" minlength="12" maxlength="12" pattern="\d{12}">
-          <p class="hint">Xem trên thẻ CCCD hoặc trên ứng dụng VNeID của thành viên gia đình theo hướng dẫn: <a href="https://youtube.com/shorts/i32TTUsRoWY" target="_blank" rel="noopener noreferrer">https://youtube.com/shorts/i32TTUsRoWY</a></p>
+          <p class="hint">Xem trên thẻ CCCD hoặc trên ứng dụng VNeID của thành viên GĐ theo hướng dẫn: <a href="https://youtube.com/shorts/i32TTUsRoWY" target="_blank" rel="noopener noreferrer">https://youtube.com/shorts/i32TTUsRoWY</a></p>
           <div class="error-msg" id="err_cccd">Mã định danh/CCCD phải gồm đúng 12 chữ số</div>
-        </div>
-        <div class="field-group">
-          <label>Số thẻ bảo hiểm y tế/bảo hiểm xã hội <span class="req">*</span></label>
-          <input type="text" id="bhyt" placeholder="10 hoặc 15 ký tự" minlength="10" maxlength="15" pattern="([A-Za-z0-9]{10}|[A-Za-z0-9]{15})">
-          <p class="hint">Xem trên thẻ BHYT hoặc tra trên ứng dụng VssID bằng số ĐDCN/CCCD theo hướng dẫn: <a href="https://youtu.be/vCxV5EwweJo" target="_blank" rel="noopener noreferrer">https://youtu.be/vCxV5EwweJo</a></p>
-          <div class="error-msg" id="err_bhyt">Số thẻ BHYT/BHXH phải có 10 hoặc 15 ký tự chữ/số</div>
         </div>
       </div>
 
-      <!-- Hàng 6: SĐT học sinh | Chiều cao (cm) | Cân nặng (kg) (3 cột) -->
-      <!-- [FIELD] sdt_hs   – 10 chữ số (JS filter) -->
+      <!-- Hàng 6: Khả năng bơi | Chiều cao (cm) | Cân nặng (kg) (3 cột) -->
+      <!-- [FIELD] khaNangBoi – dropdown Biết bơi / Không biết bơi -->
       <!-- [FIELD] chieucao – số thực, JS chuyển dấu phẩy → chấm -->
       <!-- [FIELD] cannang  – số thực, JS chuyển dấu phẩy → chấm -->
       <div class="row3">
         <div class="field-group">
-          <label>Số điện thoại học sinh <span class="req">*</span></label>
-          <input type="text" id="sdt_hs" placeholder="Nhập 10 chữ số" inputmode="numeric" minlength="10" maxlength="10" pattern="\d{10}">
-          <div class="error-msg" id="err_sdt_hs">Số điện thoại học sinh phải gồm đúng 10 chữ số</div>
+          <label>Khả năng bơi (tự đánh giá) <span class="req">*</span></label>
+          <select id="khaNangBoi">
+            <option value="">-- Chọn --</option>
+            <option value="Biết bơi">Biết bơi</option>
+            <option value="Không biết bơi">Không biết bơi</option>
+          </select>
+          <div class="error-msg" id="err_khaNangBoi">Vui lòng chọn</div>
         </div>
         <div class="field-group">
           <label>Chiều cao <span class="req">*</span></label>
@@ -859,25 +890,6 @@
             <div class="error-msg" id="err_gd_dien">Vui lòng chọn diện gia đình</div>
           </div>
         </div>
-        <div class="row3" style="margin-top:14px">
-          <div class="field-group">
-            <label>Số tài khoản PHHS <span class="req">*</span></label>
-            <input type="text" id="so_tk_phhs" placeholder="Nhập số tài khoản" inputmode="numeric">
-            <div class="error-msg" id="err_so_tk_phhs">Vui lòng nhập số tài khoản</div>
-          </div>
-          <div class="field-group">
-            <label>Tên chủ tài khoản <span class="req">*</span></label>
-            <input type="text" id="ten_chu_tk" placeholder="Nhập tên chủ tài khoản">
-            <div class="error-msg" id="err_ten_chu_tk">Vui lòng nhập tên chủ tài khoản</div>
-          </div>
-          <div class="field-group">
-            <label>Tên ngân hàng <span class="req">*</span></label>
-            <select id="ten_ngan_hang_sel"><option value="">-- Chọn ngân hàng --</option></select>
-            <input type="text" id="ten_ngan_hang_txt" placeholder="Nhập tên ngân hàng..." oninput="onNganHangTxt()" style="display:none;margin-top:6px">
-            <input type="hidden" id="ten_ngan_hang">
-            <div class="error-msg" id="err_ten_ngan_hang">Vui lòng chọn hoặc nhập tên ngân hàng</div>
-          </div>
-        </div>
       </div>
       <div class="section-title" style="font-size:0.95rem;margin:14px 0">Thông tin anh/chị/em (nếu có)</div>
       <div style="background:#f8faff;border-radius:8px;padding:14px 16px;margin-bottom:12px">
@@ -899,14 +911,14 @@
         </div>
         <div class="row2">
           <div class="field-group">
-            <label>Đang học lớp <span class="req">*</span></label>
+            <label>Đang học lớp/Đi làm <span class="req">*</span></label>
             <input type="text" id="ace1_lop" placeholder="Ví dụ: 10A1">
-            <div class="error-msg" id="err_ace1_lop">Vui lòng nhập lớp của anh/chị/em thứ nhất</div>
+            <div class="error-msg" id="err_ace1_lop">Vui lòng nhập thông tin lớp/đi làm của anh/chị/em thứ nhất</div>
           </div>
           <div class="field-group">
-            <label>Trường <span class="req">*</span></label>
+            <label>Trường/Cơ quan <span class="req">*</span></label>
             <input type="text" id="ace1_truong" placeholder="Tên trường">
-            <div class="error-msg" id="err_ace1_truong">Vui lòng nhập trường của anh/chị/em thứ nhất</div>
+            <div class="error-msg" id="err_ace1_truong">Vui lòng nhập trường/cơ quan của anh/chị/em thứ nhất</div>
           </div>
         </div>
       </div>
@@ -929,14 +941,14 @@
         </div>
         <div class="row2">
           <div class="field-group">
-            <label>Đang học lớp <span class="req">*</span></label>
+            <label>Đang học lớp/Đi làm <span class="req">*</span></label>
             <input type="text" id="ace2_lop" placeholder="Ví dụ: 7B">
-            <div class="error-msg" id="err_ace2_lop">Vui lòng nhập lớp của anh/chị/em thứ hai</div>
+            <div class="error-msg" id="err_ace2_lop">Vui lòng nhập thông tin lớp/đi làm của anh/chị/em thứ hai</div>
           </div>
           <div class="field-group">
-            <label>Trường <span class="req">*</span></label>
+            <label>Trường/Cơ quan <span class="req">*</span></label>
             <input type="text" id="ace2_truong" placeholder="Tên trường">
-            <div class="error-msg" id="err_ace2_truong">Vui lòng nhập trường của anh/chị/em thứ hai</div>
+            <div class="error-msg" id="err_ace2_truong">Vui lòng nhập trường/cơ quan của anh/chị/em thứ hai</div>
           </div>
         </div>
       </div>
@@ -959,14 +971,74 @@
         </div>
         <div class="row2">
           <div class="field-group">
-            <label>Đang học lớp <span class="req">*</span></label>
+            <label>Đang học lớp/Đi làm <span class="req">*</span></label>
             <input type="text" id="ace3_lop" placeholder="Ví dụ: 5A">
-            <div class="error-msg" id="err_ace3_lop">Vui lòng nhập lớp của anh/chị/em thứ ba</div>
+            <div class="error-msg" id="err_ace3_lop">Vui lòng nhập thông tin lớp/đi làm của anh/chị/em thứ ba</div>
           </div>
           <div class="field-group">
-            <label>Trường <span class="req">*</span></label>
+            <label>Trường/Cơ quan <span class="req">*</span></label>
             <input type="text" id="ace3_truong" placeholder="Tên trường">
-            <div class="error-msg" id="err_ace3_truong">Vui lòng nhập trường của anh/chị/em thứ ba</div>
+            <div class="error-msg" id="err_ace3_truong">Vui lòng nhập trường/cơ quan của anh/chị/em thứ ba</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#f8faff;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;color:#1565c0;margin-bottom:10px;font-size:0.92rem">
+          <span>④ Anh/Chị/Em thứ tư</span>
+          <label class="skip-toggle"><input type="checkbox" id="skip_ace4"> Không có thông tin (không xác định)</label>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Họ và tên <span class="req">*</span></label>
+            <input type="text" id="ace4_hoten" placeholder="Họ và tên">
+            <div class="error-msg" id="err_ace4_hoten">Vui lòng nhập họ tên anh/chị/em thứ tư</div>
+          </div>
+          <div class="field-group">
+            <label>Ngày sinh <span class="req">*</span></label>
+            <input type="text" id="ace4_ngaysinh" placeholder="dd/mm/yyyy" maxlength="10" inputmode="numeric" autocomplete="off" class="ace-date">
+            <div class="error-msg" id="err_ace4_ngaysinh">Vui lòng nhập ngày sinh hợp lệ</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Đang học lớp/Đi làm <span class="req">*</span></label>
+            <input type="text" id="ace4_lop" placeholder="Ví dụ: 4C hoặc Đi làm">
+            <div class="error-msg" id="err_ace4_lop">Vui lòng nhập thông tin lớp/đi làm của anh/chị/em thứ tư</div>
+          </div>
+          <div class="field-group">
+            <label>Trường/Cơ quan <span class="req">*</span></label>
+            <input type="text" id="ace4_truong" placeholder="Tên trường/cơ quan">
+            <div class="error-msg" id="err_ace4_truong">Vui lòng nhập trường/cơ quan của anh/chị/em thứ tư</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#f8faff;border-radius:8px;padding:14px 16px;margin-bottom:4px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;color:#1565c0;margin-bottom:10px;font-size:0.92rem">
+          <span>⑤ Anh/Chị/Em thứ năm</span>
+          <label class="skip-toggle"><input type="checkbox" id="skip_ace5"> Không có thông tin (không xác định)</label>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Họ và tên <span class="req">*</span></label>
+            <input type="text" id="ace5_hoten" placeholder="Họ và tên">
+            <div class="error-msg" id="err_ace5_hoten">Vui lòng nhập họ tên anh/chị/em thứ năm</div>
+          </div>
+          <div class="field-group">
+            <label>Ngày sinh <span class="req">*</span></label>
+            <input type="text" id="ace5_ngaysinh" placeholder="dd/mm/yyyy" maxlength="10" inputmode="numeric" autocomplete="off" class="ace-date">
+            <div class="error-msg" id="err_ace5_ngaysinh">Vui lòng nhập ngày sinh hợp lệ</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Đang học lớp/Đi làm <span class="req">*</span></label>
+            <input type="text" id="ace5_lop" placeholder="Ví dụ: 3A hoặc Đi làm">
+            <div class="error-msg" id="err_ace5_lop">Vui lòng nhập thông tin lớp/đi làm của anh/chị/em thứ năm</div>
+          </div>
+          <div class="field-group">
+            <label>Trường/Cơ quan <span class="req">*</span></label>
+            <input type="text" id="ace5_truong" placeholder="Tên trường/cơ quan">
+            <div class="error-msg" id="err_ace5_truong">Vui lòng nhập trường/cơ quan của anh/chị/em thứ năm</div>
           </div>
         </div>
       </div>
@@ -1033,6 +1105,13 @@
     </div>
   </div>
 
+  <div id="submitNotice" style="display:none;margin:0 28px 0;padding:12px 16px;background:#fffde7;border:1.5px solid #f9a825;border-radius:10px;align-items:flex-start;gap:10px">
+    <span style="font-size:1.35rem;line-height:1">⚠️</span>
+    <p style="margin:0;font-size:0.95rem;color:#5d4037;line-height:1.5">
+      <strong>Kiểm tra kỹ trước khi gửi!</strong><br>
+      Nhấn <strong>← Quay lại</strong> để xem lại và chỉnh sửa thông tin nếu cần. Sau khi nhấn <strong>⬇ Gửi &amp; Tải về Kết Quả</strong>, bạn sẽ <strong>Không Thể Sửa</strong> và sẽ phải <strong>Điền Lại Toàn Bộ Phiếu</strong>.
+    </p>
+  </div>
   <div class="actions" id="actionBar">
     <button class="btn btn-back" id="btnBack" onclick="goBack()" style="visibility:hidden">← Quay lại</button>
     <button class="btn btn-next" id="btnNext" onclick="goNext()">Tiếp theo →</button>
@@ -1175,11 +1254,14 @@ function validatePage(p) {
     if (!val('danToc')) ok = showErr('danToc', true) && false; else showErr('danToc', false);
     if (!val('quocTich')) ok = showErr('quocTich', true) && false; else showErr('quocTich', false);
     const sdtHs = val('sdt_hs');
-    if (!/^\d{10}$/.test(sdtHs)) ok = showErr('sdt_hs', true) && false; else showErr('sdt_hs', false);
+    if (!sdtHs) ok = showErr('sdt_hs', true) && false; 
+    else if (val('sdt_hs_sel') === 'Có SĐT cá nhân' && !/^\d{10}$/.test(sdtHs)) ok = showErr('sdt_hs', true) && false;
+    else showErr('sdt_hs', false);
     const cccd = val('cccd');
     if (!/^\d{12}$/.test(cccd)) ok = showErr('cccd', true) && false; else showErr('cccd', false);
     const bhyt = val('bhyt');
     if (!/^([A-Za-z0-9]{10}|[A-Za-z0-9]{15})$/.test(bhyt)) ok = showErr('bhyt', true) && false; else showErr('bhyt', false);
+    if (!val('khaNangBoi')) ok = showErr('khaNangBoi', true) && false; else showErr('khaNangBoi', false);
     if (!val('bhyt_mienPhi')) ok = showErr('bhyt_mienPhi', true) && false; else showErr('bhyt_mienPhi', false);
     const chieuCao = val('chieucao');
     if (!/^\d+(\.\d+)?$/.test(chieuCao)) ok = showErr('chieucao', true) && false; else showErr('chieucao', false);
@@ -1224,11 +1306,7 @@ function validatePage(p) {
 
     if (!val('so_ace')) ok = showErr('so_ace', true) && false; else showErr('so_ace', false);
     if (!document.getElementById('gd_dien').value.trim()) ok = showErr('gd_dien', true) && false; else showErr('gd_dien', false);
-    if (!val('so_tk_phhs')) ok = showErr('so_tk_phhs', true) && false; else showErr('so_tk_phhs', false);
-    if (!val('ten_chu_tk')) ok = showErr('ten_chu_tk', true) && false; else showErr('ten_chu_tk', false);
-    if (!document.getElementById('ten_ngan_hang').value.trim()) ok = showErr('ten_ngan_hang', true) && false; else showErr('ten_ngan_hang', false);
-
-    [['ace1','skip_ace1'],['ace2','skip_ace2'],['ace3','skip_ace3']].forEach(function(pair) {
+    [['ace1','skip_ace1'],['ace2','skip_ace2'],['ace3','skip_ace3'],['ace4','skip_ace4'],['ace5','skip_ace5']].forEach(function(pair) {
       const prefix = pair[0];
       const skipId = pair[1];
       if (!isChecked(skipId)) {
@@ -1268,12 +1346,15 @@ function updateUI() {
   document.getElementById('btnBack').style.visibility = currentPage > 1 ? 'visible' : 'hidden';
   const btnNext = document.getElementById('btnNext');
   const actionBar = document.getElementById('actionBar');
+  const submitNotice = document.getElementById('submitNotice');
   if (currentPage === 6) {
     actionBar.style.display = 'none';
+    submitNotice.style.display = 'none';
   } else {
     actionBar.style.display = 'flex';
-    btnNext.textContent = currentPage === totalPages ? '✓ Hoàn tất & Gửi' : 'Tiếp theo →';
+    btnNext.textContent = currentPage === totalPages ? '⬇ Gửi & Tải về Kết Quả' : 'Tiếp theo →';
     btnNext.className = 'btn ' + (currentPage === totalPages ? 'btn-submit' : 'btn-next');
+    submitNotice.style.display = currentPage === totalPages ? 'flex' : 'none';
   }
 }
 
@@ -1336,7 +1417,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Numeric-only fields with fixed length
-  ['sdt_hs','sdt_cha','sdt_me','cccd'].forEach(function(id) {
+  ['sdt_hs_txt','sdt_cha','sdt_me','sdt_giamho','cccd'].forEach(function(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', function() {
@@ -1344,7 +1425,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // BHYT/BHXH: keep only letters and digits, normalize to uppercase
+  // BHYT: keep only letters and digits, normalize to uppercase
   const bhytEl = document.getElementById('bhyt');
   if (bhytEl) {
     bhytEl.addEventListener('input', function() {
@@ -1363,6 +1444,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// Handler for SĐT học sinh dropdown
+function onSdtHsSel() {
+  const sel = document.getElementById('sdt_hs_sel').value;
+  const txtInput = document.getElementById('sdt_hs_txt');
+  const hidden = document.getElementById('sdt_hs');
+  
+  if (sel === 'Có SĐT cá nhân') {
+    txtInput.style.display = 'block';
+    hidden.value = txtInput.value;
+  } else if (sel === 'Không có SĐT cá nhân') {
+    txtInput.style.display = 'none';
+    txtInput.value = '';
+    hidden.value = 'Không có SĐT cá nhân';
+  } else {
+    txtInput.style.display = 'none';
+    txtInput.value = '';
+    hidden.value = '';
+  }
+}
+
+function onSdtHsTxt() {
+  const txtInput = document.getElementById('sdt_hs_txt');
+  const hidden = document.getElementById('sdt_hs');
+  hidden.value = txtInput.value;
+}
 
 function getServicePreferences() {
   const values = Array.from(document.querySelectorAll('input[name="nguyenvong_dichvu"]:checked')).map(el => el.value);
@@ -1385,11 +1492,12 @@ function submitForm() {
     danToc:          val('danToc'),
     quocTich:        val('quocTich'),
     bhyt_mienPhi:    val('bhyt_mienPhi'),
-    cccd:            val('cccd'),
     bhyt:            val('bhyt'),
+    cccd:            val('cccd'),
     sdt_hs:          val('sdt_hs'),
     chieucao:        val('chieucao'),
     cannang:         val('cannang'),
+    khaNangBoi:      val('khaNangBoi'),
     // ─── Trang 2: Thông tin cư trú ───
     tt_tinh:         val('tt_tinh'),
     tt_xa:           val('tt_xa'),
@@ -1415,9 +1523,6 @@ function submitForm() {
     sdt_giamho:      val('sdt_giamho'),
     so_ace:          val('so_ace'),
     gd_dien:         document.getElementById('gd_dien').value.trim(),
-    so_tk_phhs:      val('so_tk_phhs'),
-    ten_chu_tk:      val('ten_chu_tk'),
-    ten_ngan_hang:   document.getElementById('ten_ngan_hang').value.trim(),
     ace1_hoten:      val('ace1_hoten'),
     ace1_ngaysinh:   val('ace1_ngaysinh'),
     ace1_lop:        val('ace1_lop'),
@@ -1430,6 +1535,14 @@ function submitForm() {
     ace3_ngaysinh:   val('ace3_ngaysinh'),
     ace3_lop:        val('ace3_lop'),
     ace3_truong:     val('ace3_truong'),
+    ace4_hoten:      val('ace4_hoten'),
+    ace4_ngaysinh:   val('ace4_ngaysinh'),
+    ace4_lop:        val('ace4_lop'),
+    ace4_truong:     val('ace4_truong'),
+    ace5_hoten:      val('ace5_hoten'),
+    ace5_ngaysinh:   val('ace5_ngaysinh'),
+    ace5_lop:        val('ace5_lop'),
+    ace5_truong:     val('ace5_truong'),
     // ─── Trang 5: Thông tin khác ───
     hsg_thamgia:     document.getElementById('hsg_thamgia').value.trim(),
     bcs_lop:         val('bcs_lop'),
@@ -1441,7 +1554,7 @@ function submitForm() {
   };
 
   // ← Dán URL Web App của bạn vào đây
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzj5tRAUjru0K8ilqhFfoKlgfYEgAF1WE-YxktbAJR87e0X4H1Kfl-cvAa_KkBNMELe/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOLo05pwQKHvFnT0etIZWwPx1dkB_TYeNVkpLzarDhq1jLkvplwGN2agyId3L0x_E/exec';
 
   const btnNext = document.getElementById('btnNext');
   btnNext.disabled = true;
@@ -1449,22 +1562,33 @@ function submitForm() {
 
   fetch(SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',        // bắt buộc vì Apps Script không trả CORS header
-    headers: { 'Content-Type': 'application/json' },
+    // text/plain tránh CORS preflight; Apps Script vẫn nhận được nội dung JSON
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(data)
   })
-  .then(() => {
-    // no-cors không đọc được response → cứ chuyển sang trang thành công
-    showSummary(data);
+  .then(res => res.json())
+  .then(result => {
+    const pdfUrl = (result && result.pdfUrl) ? result.pdfUrl : '';
+    if (pdfUrl) {
+      // Tự động mở link tải PDF trong tab mới
+      const a = document.createElement('a');
+      a.href = pdfUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    showSummary(data, pdfUrl);
   })
   .catch(err => {
     alert('Lỗi kết nối: ' + err.message + '\nVui lòng thử lại.');
     btnNext.disabled = false;
-    btnNext.textContent = '✓ Hoàn tất & Gửi';
+    btnNext.textContent = '✓ Gửi & Tải Về Phiếu Kết Quả';
   });
 }
 
-function showSummary(data) {
+function showSummary(data, pdfUrl) {
   const labels = {
     hoTen:'Họ và tên', doiTuong:'Đối tượng CS', lop:'Lớp', coSo:'Cơ sở', ngaySinh:'Ngày sinh', gioiTinh:'Giới tính',
     danToc:'Dân tộc', quocTich:'Quốc tịch', tt_tinh:'Thường trú - Tỉnh/TP', tt_xa:'Thường trú - Xã/Phường',
@@ -1475,11 +1599,12 @@ function showSummary(data) {
     hoten_me:'Họ tên mẹ', namsinh_me:'Năm sinh mẹ', nghenghiep_me:'Nghề nghiệp mẹ',
     hoten_giamho:'Họ tên người giám hộ', namsinh_giamho:'Năm sinh người giám hộ', nghenghiep_giamho:'Nghề nghiệp người giám hộ', sdt_giamho:'Số điện thoại người giám hộ',
     sdt_cha:'SĐT bố', sdt_me:'SĐT mẹ', so_ace:'Số anh/chị/em', gd_dien:'GĐ thuộc diện',
-    so_tk_phhs:'Số tài khoản PHHS', ten_chu_tk:'Tên chủ tài khoản', ten_ngan_hang:'Tên ngân hàng',
-    ace1_hoten:'ACE 1 - Họ tên', ace1_ngaysinh:'ACE 1 - Ngày sinh', ace1_lop:'ACE 1 - Lớp', ace1_truong:'ACE 1 - Trường',
-    ace2_hoten:'ACE 2 - Họ tên', ace2_ngaysinh:'ACE 2 - Ngày sinh', ace2_lop:'ACE 2 - Lớp', ace2_truong:'ACE 2 - Trường',
-    ace3_hoten:'ACE 3 - Họ tên', ace3_ngaysinh:'ACE 3 - Ngày sinh', ace3_lop:'ACE 3 - Lớp', ace3_truong:'ACE 3 - Trường',
-    sdt_hs:'SĐT học sinh', cccd:'CCCD/Mã định danh', bhyt:'Số thẻ BHYT/BHXH', bhyt_mienPhi:'BHYT miễn phí', chieucao:'Chiều cao (cm)', cannang:'Cân nặng (kg)',
+    ace1_hoten:'ACE 1 - Họ tên', ace1_ngaysinh:'ACE 1 - Ngày sinh', ace1_lop:'ACE 1 - Đang học lớp/Đi làm', ace1_truong:'ACE 1 - Trường/Cơ quan',
+    ace2_hoten:'ACE 2 - Họ tên', ace2_ngaysinh:'ACE 2 - Ngày sinh', ace2_lop:'ACE 2 - Đang học lớp/Đi làm', ace2_truong:'ACE 2 - Trường/Cơ quan',
+    ace3_hoten:'ACE 3 - Họ tên', ace3_ngaysinh:'ACE 3 - Ngày sinh', ace3_lop:'ACE 3 - Đang học lớp/Đi làm', ace3_truong:'ACE 3 - Trường/Cơ quan',
+    ace4_hoten:'ACE 4 - Họ tên', ace4_ngaysinh:'ACE 4 - Ngày sinh', ace4_lop:'ACE 4 - Đang học lớp/Đi làm', ace4_truong:'ACE 4 - Trường/Cơ quan',
+    ace5_hoten:'ACE 5 - Họ tên', ace5_ngaysinh:'ACE 5 - Ngày sinh', ace5_lop:'ACE 5 - Đang học lớp/Đi làm', ace5_truong:'ACE 5 - Trường/Cơ quan',
+    sdt_hs:'SĐT học sinh', cccd:'CCCD/Mã định danh', bhyt:'Số thẻ BHYT', bhyt_mienPhi:'BHYT miễn phí', chieucao:'Chiều cao (cm)', cannang:'Cân nặng (kg)',
     hsg_thamgia:'Kết quả thi HSG tỉnh/TP', bcs_lop:'Tham gia BCS lớp',
     nangkhieu:'Năng khiếu', giaithuong_db:'Giải thưởng đặc biệt', ph_banhoi:'PH tham gia Ban chi hội',
     dinhhuong_nghe:'Định hướng nghề nghiệp', mongmuon:'Mong muốn của PH/HS'
@@ -1491,6 +1616,16 @@ function showSummary(data) {
      </div>`
   ).join('');
   document.getElementById('summaryBox').innerHTML = html;
+  if (pdfUrl) {
+    const dlWrap = document.createElement('div');
+    dlWrap.style.cssText = 'margin:18px 0 6px;text-align:center';
+    dlWrap.innerHTML = '<a href="' + pdfUrl + '" target="_blank" rel="noopener noreferrer" '
+      + 'style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,#1565c0,#0d47a1);'
+      + 'color:#fff;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.02rem">'
+      + '&#11015; Tải xuống Phiếu PDF</a>';
+    const box = document.querySelector('#page6 .success-box');
+    box.insertBefore(dlWrap, document.getElementById('summaryBox'));
+  }
   currentPage = 6;
   updateUI();
   window.scrollTo(0, 0);
@@ -1570,10 +1705,6 @@ function onBcsLopTxt() {
 function onPhBanHoiTxt() {
   document.getElementById('ph_banhoi').value = document.getElementById('ph_banhoi_txt').value;
 }
-function onNganHangTxt() {
-  document.getElementById('ten_ngan_hang').value = document.getElementById('ten_ngan_hang_txt').value;
-}
-
 (function initNgheSelects() {
   ['cha','me','giamho'].forEach(function(p) {
     const selId = 'nghenghiep_' + p + '_sel';
@@ -1866,6 +1997,8 @@ function initSkipToggles() {
   bindSkipToggle('skip_ace1', ['ace1_hoten','ace1_ngaysinh','ace1_lop','ace1_truong'], []);
   bindSkipToggle('skip_ace2', ['ace2_hoten','ace2_ngaysinh','ace2_lop','ace2_truong'], []);
   bindSkipToggle('skip_ace3', ['ace3_hoten','ace3_ngaysinh','ace3_lop','ace3_truong'], []);
+  bindSkipToggle('skip_ace4', ['ace4_hoten','ace4_ngaysinh','ace4_lop','ace4_truong'], []);
+  bindSkipToggle('skip_ace5', ['ace5_hoten','ace5_ngaysinh','ace5_lop','ace5_truong'], []);
 }
 
 (function initTomSelect() {
@@ -1889,7 +2022,7 @@ function initSkipToggles() {
       }
     });
   });
-})(); // initNganHangSelect
+})(); // initTomSelect
 
 (function initHsgThamgiaSelect() {
   const selId = 'hsg_thamgia_sel';
@@ -1983,36 +2116,6 @@ function initSkipToggles() {
     onChange: function(v) {
       const txt = document.getElementById('ph_banhoi_txt');
       const hid = document.getElementById('ph_banhoi');
-      if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
-      else { txt.style.display = 'none'; hid.value = v; }
-    }
-  });
-})();
-
-(function initNganHangSelect() {
-  const selId = 'ten_ngan_hang_sel';
-  const sel = document.getElementById(selId);
-  if (!sel) return;
-  const NH_LIST = [
-    'Vietcombank','VietinBank','BIDV','Agribank','MB Bank',
-    'Techcombank','ACB','VPBank','TPBank','Sacombank',
-    'HDBank','VIB','SHB','Eximbank','MSB','SeABank',
-    'LPBank','Nam A Bank','OCB','ABBank','NCB',
-    'BacABank','PGBank','Baoviet Bank','Saigonbank',
-    'Viet Capital Bank','VietABank','KienLong Bank'
-  ];
-  const customOpt = document.createElement('option');
-  customOpt.value = '__custom__'; customOpt.textContent = 'Điền thủ công';
-  sel.appendChild(customOpt);
-  NH_LIST.forEach(function(name) {
-    const opt = document.createElement('option');
-    opt.value = name; opt.textContent = name; sel.appendChild(opt);
-  });
-  tsInstances[selId] = new TomSelect(sel, {
-    allowEmptyOption: true, maxOptions: null, plugins: ['no_backspace_delete'],
-    onChange: function(v) {
-      const txt = document.getElementById('ten_ngan_hang_txt');
-      const hid = document.getElementById('ten_ngan_hang');
       if (v === '__custom__') { txt.style.display = 'block'; txt.value = ''; hid.value = ''; txt.focus(); }
       else { txt.style.display = 'none'; hid.value = v; }
     }
